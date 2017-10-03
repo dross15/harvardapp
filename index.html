@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Office Hours Queue</title>
+</head>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+	$(function () {
+		//loads socket.io client
+		var socket = io();
+		$('form').submit(function () {
+			//user types in types in name and request and server gets the request
+			socket.emit('request', $('#m').val() + ': ' + $('#n').val());
+			$('#m').val('');
+			$('#n').val('');
+			return false;
+		});
+		socket.on('request', function (request) {
+			//appends the list of requests to the browser
+			$('#requests').append($('<li>').text(request));
+		});
+	});
+</script>
+
+<body>
+	<div style="padding 15px; background-color: lightgray">
+		Welcome! To stand in line, add your name and question.
+		<br>
+		<hr>
+		<ol id="requests"></ol>
+		<form action="">
+			Name:
+			<input type="text" id="m" autocomplete="off"> 
+			Question:
+			<input type="text" id="n" autocomplete="off">
+			<br>
+			<button>Submit</button>
+		</form>
+	</div>
+</body>
+
+</html>
